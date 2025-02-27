@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Maintenance Entry Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Vehicle Maintenance Entry Form</h2>
+        <form id="maintenanceForm">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="transactionNumber" class="form-label">Transaction Number</label>
+                    <input type="text" class="form-control" id="transactionNumber" placeholder="System Generate" required disabled>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="vehicleNumber" class="form-label">Vehicle Number</label>
+                    <select class="form-control" id="vehicleNumber" required>
+                        <option value="">Search Vehicle Number</option>
+                    </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="maintenanceDate" class="form-label">Date</label>
+                    <input type="date" class="form-control" id="maintenanceDate" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    <label for="notes" class="form-label">Additional Notes</label>
+                    <textarea class="form-control" id="notes" rows="3" placeholder="Enter any additional details"></textarea>
+                </div>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="button" class="btn btn-secondary" onclick="openTaskTypeForm()">TaskType</button>
+                <button type="button" class="btn btn-success">Confirm</button>
+            </div>
+        </form>
+        
+        <h3 class="text-center mt-5">Maintenance Records</h3>
+        <table class="table table-bordered mt-3">
+            <thead>
+                <tr>
+                    <th>Maintenance Type</th>
+                    <th>Workshop Type</th>
+                    <th>Cost</th>
+                </tr>
+            </thead>
+            <tbody id="recordTableBody">
+            </tbody>
+        </table>
+    </div>
+
+    <div id="taskTypeModal" class="modal fade" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Enter Task Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="taskTypeForm">
+                        <div class="mb-3">
+                            <label for="maintenanceType" class="form-label">Maintenance Type</label>
+                            <select class="form-control" id="maintenanceType" required>
+                                <option value="">Select Maintenance Type</option>
+                                <option value="Oil Change">Oil Change</option>
+                                <option value="Tire Replacement">Tire Replacement</option>
+                                <option value="Battery Replacement">Battery Replacement</option>
+                                <option value="Brake Service">Brake Service</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="Workshop Type" class="form-label">Workshop Type</label>
+                            <select class="form-control" id="WorkshopType" required>
+                                <option value="">Select Workshop Type</option>
+                                <option value="InHouse Workshop">InHouse Workshop</option>
+                                <option value="Out Workshop">3rd Party Workshop</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="Workshop Name" class="form-label">Workshop Name</label>
+                            <input type="text" class="form-control" id="cost" placeholder="Enter Workshop Name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="cost" class="form-label">Cost</label>
+                            <input type="number" class="form-control" id="cost" placeholder="Enter cost" required>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script>
+        function openTaskTypeForm() {
+            let modal = new bootstrap.Modal(document.getElementById('taskTypeModal'));
+            modal.show();
+        }
+
+        $(document).ready(function() {
+            $('#vehicleNumber').select2({
+                placeholder: "Search Vehicle Number",
+                ajax: {
+                    url: '/api/getVehicles',
+                    dataType: 'json',
+                    delay: 250,
+                    processResults: function (data) {
+                        return {
+                            results: data.map(vehicle => ({ id: vehicle.id, text: vehicle.number }))
+                        };
+                    },
+                    cache: true
+                }
+            });
+        });
+    </script>
+</body>
+</html>
