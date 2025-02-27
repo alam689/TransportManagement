@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diesel Entry Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        form {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+        button {
+            padding: 10px;
+            width: 48%;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .confirm {
+            background-color: #28a745;
+        }
+        .confirm:hover {
+            background-color: #218838;
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+
+    <form id="dieselForm">
+        <h2>Diesel Entry Form</h2>
+
+        <label for="veh_no">Vehicle Number:</label>
+        <input list="vehicle_list" id="veh_no" name="veh_no" required>
+        <datalist id="vehicle_list">
+            <option value="ABC-1234">
+            <option value="XYZ-5678">
+            <option value="LMN-9101">
+        </datalist>
+
+        <label for="driver">Driver Name:</label>
+        <input list="driver_list" id="driver" name="driver" required>
+        <datalist id="driver_list">
+            <option value="John Doe">
+            <option value="Jane Smith">
+            <option value="Michael Brown">
+        </datalist>
+
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" required>
+
+        <label for="diesel_amount">Diesel Amount (Ltr):</label>
+        <input type="number" id="diesel_amount" name="diesel_amount" step="0.01" required>
+
+        <label for="pump_name">Pump Name:</label>
+        <input type="text" id="pump_name" name="pump_name" required>
+
+        <div class="button-group">
+            <button type="submit">Submit</button>
+            <button type="button" class="confirm" onclick="addEntry()">Confirm</button>
+        </div>
+    </form>
+
+    <!-- Table to Display Entries -->
+    <h2 style="text-align:center;">Diesel Entry List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Vehicle No</th>
+                <th>Driver</th>
+                <th>Date</th>
+                <th>Diesel in (Ltr)</th>   
+            </tr>
+        </thead>
+        <tbody id="entryTable">
+            <!-- Entries will be added dynamically here -->
+        </tbody>
+    </table>
+
+    <script>
+        function addEntry() {
+            // Get form values
+            let vehNo = document.getElementById('veh_no').value;
+            let driver = document.getElementById('driver').value;
+            let date = document.getElementById('date').value;
+            let dieselAmount = document.getElementById('diesel_amount').value;
+            let pumpName = document.getElementById('pump_name').value;
+
+            if (!vehNo || !driver || !date || !dieselAmount || !pumpName) {
+                alert("Please fill in all fields before confirming.");
+                return;
+            }
+
+            // Create a new table row
+            let table = document.getElementById("entryTable");
+            let row = table.insertRow();
+            row.innerHTML = `<td>${vehNo}</td><td>${driver}</td><td>${date}</td><td>${dieselAmount}</td><td>${pumpName}</td>`;
+
+            // Clear form fields after adding entry
+            document.getElementById("dieselForm").reset();
+        }
+    </script>
+
+</body>
+</html>
